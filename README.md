@@ -1,34 +1,33 @@
-# Kafka Cluster with KRaft Mode and UI
+# Kafka with KRaft Mode + Kafka UI
 
-This project sets up a 3-node Apache Kafka cluster using KRaft mode (without Zookeeper) along with Kafka UI for management.
+This project sets up a single-node Apache Kafka cluster using **KRaft mode** (no Zookeeper) and **Kafka UI** for management.
 
 ## Features
 
-- 3 Kafka brokers in KRaft mode (no Zookeeper needed)
-- Kafka UI for cluster monitoring and management
-- Persistent storage for each broker
-- External ports exposed for each broker
+- Kafka broker running in KRaft mode
+- Kafka UI for monitoring and topic management
+- Ports exposed for external access
 
 ## Quick Start
 
-1. Ensure Docker and Docker Compose are installed
-2. Clone this repository
+1. Install Docker and Docker Compose
+2. Clone this repo
 3. Run: `docker-compose up -d`
-4. Access Kafka UI at: `http://localhost:8080`
+4. Open Kafka UI at: [http://localhost:8088](http://localhost:8080)
 
-## Configuration
+## Services & Ports
 
-- Brokers: `kafka1`, `kafka2`, `kafka3`
-- Internal communication port: 9092
-- Controller port: 9094
-- External ports: 
-  - kafka1: 19090
-  - kafka2: 19091 
-  - kafka3: 19092
-- All brokers share the same cluster ID
+| Service   | Port    | Description         |
+|-----------|---------|---------------------|
+| Kafka     | 9092    | Internal broker     |
+|           | 9093    | Controller (KRaft)  |
+|           | 9094    | External access     |
+| Kafka UI  | 8088    | Web interface       |
 
-## Notes
+## Example Commands
 
-- Data is persisted in Docker volumes
-- KRaft mode is enabled (Kafka's built-in consensus protocol)
-- No authentication configured (plaintext listeners only)
+Create topic:
+```bash
+docker exec broker /opt/kafka/bin/kafka-topics.sh --create \
+  --topic test-topic --bootstrap-server broker:9092 \
+  --partitions 1 --replication-factor 1
